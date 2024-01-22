@@ -137,6 +137,21 @@ public class App extends Application{
         methods = new Methods(eraser, canvas, gc, colorPicker, penSize);
         methods.drawRects();  
 
+        //salvar imagem do canvas
+        saveFileMenu.setOnAction(e -> methods.saveImage());
+
+        //sair com menu
+        quitFileMenu.setOnAction(e -> {
+            e.consume();
+            methods.quit(stage);
+        });
+
+        //sair clicando no X
+        stage.setOnCloseRequest(e ->{
+            e.consume();
+            methods.quit(stage);
+        });
+        
 
         //janela
         Scene scene = new Scene(root);
