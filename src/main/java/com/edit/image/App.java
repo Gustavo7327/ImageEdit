@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 public class App extends Application{
     
+    //layout
     private AnchorPane root;
 
     private Canvas canvas;
@@ -57,6 +58,9 @@ public class App extends Application{
 
     private ToolBar toolBar;
 
+    //classes uteis
+    private Methods methods;
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -89,6 +93,8 @@ public class App extends Application{
         colorPicker.setCursor(Cursor.OPEN_HAND);
         //penSize
         penSize = new TextField();
+        penSize.setPromptText("Pen size");
+        penSize.setText("8");
         penSize.setCursor(Cursor.TEXT);
         //eraser
         eraser = new CheckBox("Eraser");
@@ -126,6 +132,11 @@ public class App extends Application{
         menuBar = new MenuBar(fileMenu,effectsMenu,editMenu,helpMenu);
         menuBar.setPrefSize(900, 28);
         root.getChildren().add(menuBar);
+
+        //desenhar no canvas
+        methods = new Methods(eraser, canvas, gc, colorPicker, penSize);
+        methods.drawRects();  
+
 
         //janela
         Scene scene = new Scene(root);
