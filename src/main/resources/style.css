@@ -1,0 +1,46 @@
+.root {
+    -fx-background-color: #f0f0f0;
+    -fx-font-family: "Arial";
+}
+
+.menu-bar {
+    -fx-background-color: #494949;
+}
+
+.menu-bar .menu:hover {
+    -fx-background-color: #444444;
+    -fx-text-fill: white;
+}
+
+.tool-bar {
+    -fx-background-color: #dddddd;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 0 0 0 2px;
+}
+
+.tool-bar .color-picker {
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+}
+
+.tool-bar .check-box {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-padding: 10 5 10 5;
+}
+
+.tool-bar .spinner {
+    -fx-padding: 10;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.canvas {
+    -fx-border-color: #bbbbbb;
+    -fx-border-width: 1;
+    -fx-background-color: white;
+    -fx-cursor: crosshair;
+}

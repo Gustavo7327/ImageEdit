@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edit.image.ImageEditController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edit.image.ImageEditController">
    <children>
-      <Canvas fx:id="canvas" height="622.0" layoutY="28.0" width="724.0">
+      <Canvas fx:id="canvas" height="622.0" layoutY="28.0" width="712.0">
          <cursor>
             <Cursor fx:constant="CROSSHAIR" />
          </cursor>
@@ -43,7 +43,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <ToolBar fx:id="toolBar" layoutX="724.0" layoutY="27.0" orientation="VERTICAL" prefHeight="622.0" prefWidth="177.0">
+      <ToolBar fx:id="toolBar" layoutX="712.0" layoutY="28.0" orientation="VERTICAL" prefHeight="622.0" prefWidth="188.0">
          <items>
             <ColorPicker fx:id="colorPicker" promptText="Pick a Color">
                <cursor>
