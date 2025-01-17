@@ -19,10 +19,12 @@ public class App extends Application{
         stage.setTitle("Editor");
         stage.show();
 
+        Methods methods = new Methods();
+
         //sair clicando no X
         stage.setOnCloseRequest(e ->{
             e.consume();
-            Methods.quit(stage, canvas);
+            methods.quit(stage, canvas);
         });
         
     }

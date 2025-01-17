@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckBox;
@@ -75,12 +74,16 @@ public class ImageEditController implements Initializable{
     double[] lastX = {0};
     double[] lastY = {0};
 
+    private Methods methods = new Methods();
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100));
-
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
+            1, 100, 6
+        ));
+        
         //desenhar no canvas
         canvas.setOnMouseDragged(e -> {
             double size = (double)(spinner.getValue());
@@ -107,13 +110,17 @@ public class ImageEditController implements Initializable{
         });
 
         //salvar imagem do canvas
-        saveFileMenu.setOnAction(e -> Methods.saveImage(canvas));
+        saveFileMenu.setOnAction(e -> methods.saveImage(canvas));
+
+        newFileMenu.setOnAction(e -> methods.newProject());
+
+        openFileMenu.setOnAction(e -> methods.openProject(gc));
 
         //sair com menu
         quitFileMenu.setOnAction(e -> {
             e.consume();
-            Stage stage = (Stage)((Node) e.getSource()).getScene().getWindow();
-            Methods.quit(stage, canvas);
+            Stage stage = (Stage) canvas.getScene().getWindow();
+            methods.quit(stage, canvas);
         });
 
     }
