@@ -17,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -79,6 +80,18 @@ public class Methods {
                 e.printStackTrace();
             }
         } 
+    }
+
+
+    public void applyFilter(GraphicsContext gc, Filter filter, Canvas canvas) {
+        // Capturar o conteúdo atual do canvas como uma imagem
+        WritableImage writableImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+        canvas.snapshot(null, writableImage);
+        // Aplicar o filtro à imagem capturada
+        Image filteredImage = filter.apply(writableImage);
+        // Redesenhar o canvas com a imagem filtrada
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.drawImage(filteredImage, 0, 0);
     }
 
 }
