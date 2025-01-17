@@ -29,7 +29,7 @@
                   <MenuItem fx:id="quitFileMenu" mnemonicParsing="false" text="Quit" />
                </items>
           </Menu>
-          <Menu fx:id="effectsMenu" mnemonicParsing="false" text="Effects" />
+          <Menu fx:id="filtersMenu" mnemonicParsing="false" text="Filters" />
             <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
               <items>
                 <MenuItem fx:id="insertImage" mnemonicParsing="false" text="Insert Image" />
