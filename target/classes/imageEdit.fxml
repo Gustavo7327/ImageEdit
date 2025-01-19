@@ -7,18 +7,14 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editorimagem.src.main.java.com.edit.image.ImageEditController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.edit.image.ImageEditController">
    <children>
-      <Canvas fx:id="canvas" height="600.0" layoutX="14.0" layoutY="36.0" width="600.0">
-         <cursor>
-            <Cursor fx:constant="CROSSHAIR" />
-         </cursor>
-      </Canvas>
       <MenuBar fx:id="menuBar" prefHeight="28.0" prefWidth="900.0">
         <menus>
           <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
@@ -29,11 +25,11 @@
                   <MenuItem fx:id="quitFileMenu" mnemonicParsing="false" text="Quit" />
                </items>
           </Menu>
-          <Menu fx:id="effectsMenu" mnemonicParsing="false" text="Effects" />
+          <Menu fx:id="filtersMenu" mnemonicParsing="false" text="Filters" />
             <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
               <items>
                 <MenuItem fx:id="insertImage" mnemonicParsing="false" text="Insert Image" />
-                  <MenuItem fx:id="editImage" mnemonicParsing="false" text="Edit Image" />
+                  <MenuItem fx:id="removeImage" mnemonicParsing="false" text="Remove Image" />
               </items>
             </Menu>
           <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
@@ -43,7 +39,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <ToolBar fx:id="toolBar" layoutX="715.0" layoutY="36.0" orientation="VERTICAL" prefHeight="600.0" prefWidth="171.0">
+      <ToolBar fx:id="toolBar" layoutX="712.0" layoutY="28.0" orientation="VERTICAL" prefHeight="622.0" prefWidth="188.0">
          <items>
             <ColorPicker fx:id="colorPicker" promptText="Pick a Color">
                <cursor>
@@ -65,5 +61,14 @@
             </Spinner>
          </items>
       </ToolBar>
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" layoutY="28.0" prefHeight="622.0" prefWidth="712.0">
+         <content>
+            <Canvas fx:id="canvas" height="622.0" width="712.0">
+               <cursor>
+                  <Cursor fx:constant="CROSSHAIR" />
+               </cursor>
+            </Canvas>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
