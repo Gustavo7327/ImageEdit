@@ -1,6 +1,10 @@
 package com.edit.image;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -14,11 +18,15 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.ToolBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class ImageEditController implements Initializable{
@@ -33,7 +41,7 @@ public class ImageEditController implements Initializable{
     private ColorPicker colorPicker;
 
     @FXML
-    private MenuItem editImage;
+    private MenuItem removeImage;
 
     @FXML
     private Menu editMenu;
@@ -74,8 +82,58 @@ public class ImageEditController implements Initializable{
     @FXML
     private ToolBar toolBar;
 
+    @FXML
+    private ScrollPane scrollPane;
+
     double[] lastX = {0};
     double[] lastY = {0};
+
+    private List<DraggableImage> images = new ArrayList<>();
+    private DraggableImage selectedImage = null;
+    private WritableImage canvasSnapshot;
+
+
+    public void insertImage(GraphicsContext gc) {
+        FileChooser fc = new FileChooser();
+        File selectedFile = fc.showOpenDialog(null);
+        if (selectedFile != null) {
+            try (FileInputStream inputStream = new FileInputStream(selectedFile)) {
+                Image image = new Image(inputStream);
+                DraggableImage draggableImage = new DraggableImage(image, 0, 0);
+                images.add(draggableImage);
+    
+                // Verifica se a imagem excede as dimensões do Canvas
+                double newWidth = draggableImage.getX() + image.getWidth();
+                double newHeight = draggableImage.getY() + image.getHeight();
+    
+                // Chama expandCanvas para ajustar o tamanho do Canvas se necessário
+                if (newWidth > canvas.getWidth() || newHeight > canvas.getHeight()) {
+                    methods.expandCanvas(canvas, newWidth, newHeight);
+                }
+    
+                saveCanvasState();
+                redrawCanvas(gc);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } 
+    }
+    
+
+    private void saveCanvasState() {
+        canvasSnapshot = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+        canvas.snapshot(null, canvasSnapshot);
+    }
+
+    private void redrawCanvas(GraphicsContext gc) {
+        if (canvasSnapshot != null) {
+            gc.drawImage(canvasSnapshot, 0, 0);
+        }
+        for (DraggableImage image : images) {
+            gc.drawImage(image.getImage(), image.getX(), image.getY());
+        }
+    }
+    
 
     private List<Filter> filters = Arrays.asList(
             new Filter("Invert", c -> c.invert()),
@@ -120,6 +178,17 @@ public class ImageEditController implements Initializable{
                 gc.setLineWidth(size);
                 gc.strokeLine(lastX[0], lastY[0], x, y); // Desenha uma linha entre os pontos
             }
+
+            // Verifique se o desenho ultrapassou o tamanho do Canvas
+            if (x > canvas.getWidth() || y > canvas.getHeight()) {
+                methods.expandCanvas(canvas, Math.max(x, canvas.getWidth()), Math.max(y, canvas.getHeight()));
+            }
+
+            if (selectedImage != null && !eraser.isSelected()) {
+                selectedImage.setX(x - selectedImage.getImage().getWidth() / 2);
+                selectedImage.setY(y - selectedImage.getImage().getHeight() / 2);
+                redrawCanvas(gc);
+            }
         
             // Atualiza as posições anteriores
             lastX[0] = x;
@@ -130,7 +199,31 @@ public class ImageEditController implements Initializable{
         canvas.setOnMousePressed(e -> {
             lastX[0] = e.getX();
             lastY[0] = e.getY();
+            double mouseX = e.getX();
+            double mouseY = e.getY();
+            selectedImage = null;
+
+            // Verifica se o clique está sobre uma imagem
+            for (DraggableImage image : images) {
+                double x = image.getX();
+                double y = image.getY();
+                double width = image.getImage().getWidth();
+                double height = image.getImage().getHeight();
+
+                if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
+                    selectedImage = image;
+                    break;
+                }
+            }
         });
+
+        // Configuração do evento para soltar o mouse
+        canvas.setOnMouseReleased(e -> {
+            if (selectedImage != null) {
+                selectedImage.updateImage(canvas);
+            }
+        });
+
 
         //salvar imagem do canvas
         saveFileMenu.setOnAction(e -> methods.saveImage(canvas));
@@ -139,13 +232,32 @@ public class ImageEditController implements Initializable{
 
         openFileMenu.setOnAction(e -> methods.openProject(gc));
 
-        //sair com menu
-        quitFileMenu.setOnAction(e -> {
-            e.consume();
-            Stage stage = (Stage) canvas.getScene().getWindow();
-            methods.quit(stage, canvas);
-        });
+        insertImage.setOnAction(e -> insertImage(gc));
 
+        removeImage.setOnAction(e -> removeImage());
+        
+                //sair com menu
+                quitFileMenu.setOnAction(e -> {
+                    e.consume();
+                    Stage stage = (Stage) canvas.getScene().getWindow();
+                    methods.quit(stage, canvas);
+                });
+        
+    }
+        
+        
+    private void removeImage() {
+        if (selectedImage != null) {
+            images.remove(selectedImage);
+            selectedImage = null; 
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            redrawCanvas(gc);
+        }
+    }
+        
+        
+    public Canvas getCanvas() {
+        return this.canvas;
     }
 
 }
