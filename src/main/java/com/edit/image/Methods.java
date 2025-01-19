@@ -29,11 +29,14 @@ public class Methods {
         FileChooser fileChooser = new FileChooser();
         SnapshotParameters sp = new SnapshotParameters();
         sp.setFill(Color.TRANSPARENT);
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(canvas.snapshot(sp, null), null), "png", fileChooser.showSaveDialog(null));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }  
+        File selectedFile = fileChooser.showSaveDialog(null);
+        if(selectedFile != null){
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(canvas.snapshot(sp, null), null), "png", selectedFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }     
     }
 
 
@@ -58,6 +61,7 @@ public class Methods {
             stage.setScene(scene);
             stage.setTitle("Editor");
             stage.show();
+            stage.setResizable(false);
             stage.setOnCloseRequest(e -> quit(stage, canvas));
         } catch(IOException e){
             e.printStackTrace();
@@ -92,6 +96,11 @@ public class Methods {
         // Redesenhar o canvas com a imagem filtrada
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.drawImage(filteredImage, 0, 0);
+    }
+
+    public void expandCanvas(Canvas canvas, double width, double height) {
+        canvas.setWidth(width);
+        canvas.setHeight(height);
     }
 
 }
