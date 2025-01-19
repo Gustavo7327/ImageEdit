@@ -54,10 +54,12 @@ public class Methods {
 
     public void newProject(){
         try{
-            Stage stage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("/imageEdit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/imageEdit.fxml"));
+            Parent root = loader.load();
             Scene scene = new Scene(root);
-            Canvas canvas = (Canvas) root.getChildrenUnmodifiable().getFirst();
+            ImageEditController iec = loader.getController();
+            Canvas canvas = iec.getCanvas();
+            Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Editor");
             stage.show();
